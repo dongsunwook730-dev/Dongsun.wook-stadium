@@ -113,6 +113,18 @@ button:hover {
   box-shadow:0 0 40px rgba(0,255,170,1);
 }
 
+#formMessage {
+  display:none;
+  margin-bottom:15px;
+  padding:10px;
+  border-radius:8px;
+  text-align:center;
+  font-weight:bold;
+  background:rgba(0,255,170,0.15);
+  border:1px solid rgba(0,255,170,0.6);
+  color:#00ffaa;
+}
+
 @media (max-width:480px){
   .container{padding:25px;}
   .logo-top{font-size:22px;}
@@ -133,20 +145,17 @@ button:hover {
 <form id="signupForm"
       name="signup"
       method="POST"
-      action="/thankyou.html"
       data-netlify="true"
       data-netlify-honeypot="bot-field">
 
 <input type="hidden" name="form-name" value="signup">
 
-<!-- Honeypot Spam Protection -->
+<!-- Honeypot -->
 <p style="display:none">
   <label>Don’t fill this out:
     <input name="bot-field">
   </label>
 </p>
-
-<input type="hidden" id="formTime" name="formTime">
 
 <div class="section-title">Personal Details</div>
 <input type="text" name="First Name" placeholder="First Name" required>
@@ -177,6 +186,8 @@ Admin will review your request and send login details after approval.
 <input type="text" name="Venmo" placeholder="Venmo (@username)">
 <input type="text" name="Chime" placeholder="Chime ($username)">
 
+<div id="formMessage"></div>
+
 <label style="font-size:13px;">
 <input type="checkbox" required>
  I confirm all information provided is accurate.
@@ -184,40 +195,48 @@ Admin will review your request and send login details after approval.
 
 <button type="submit">Create Account</button>
 
-  
-</form> 
- 
-  <input type="hidden" name="redirect" value="/thankyou.html"> 
-
+</form>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
   const form = document.getElementById("signupForm");
-  const formTime = document.getElementById("formTime");
+  const messageDiv = document.getElementById("formMessage");
 
-  formTime.value = Date.now();
+  function encode(data) {
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+      .join("&");
+  }
 
   form.addEventListener("submit", function(e) {
+    e.preventDefault();
 
-    const secondsTaken = (Date.now() - formTime.value) / 1000;
+    const formData = new FormData(form);
 
-    const zelle = document.querySelector("input[name='Zelle']").value.trim();
-    const venmo = document.querySelector("input[name='Venmo']").value.trim();
-    const chime = document.querySelector("input[name='Chime']").value.trim();
-
-    if (secondsTaken < 4) {
-      e.preventDefault();
-      alert("Submission too fast. Please try again.");
-      return;
-    }
+    const zelle = formData.get("Zelle")?.trim();
+    const venmo = formData.get("Venmo")?.trim();
+    const chime = formData.get("Chime")?.trim();
 
     if (!zelle && !venmo && !chime) {
-      e.preventDefault();
       alert("Please provide at least one payment method.");
       return;
     }
+
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encode(Object.fromEntries(formData))
+    })
+    .then(() => {
+      messageDiv.style.display = "block";
+      messageDiv.innerHTML = "✅ Account request submitted successfully!";
+      form.reset();
+    })
+    .catch(() => {
+      alert("Submission failed. Please try again.");
+    });
 
   });
 
