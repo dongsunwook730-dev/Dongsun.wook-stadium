@@ -1,236 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dongsun-Wook's Stadium</title>
-
-<style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-body {
-  background: radial-gradient(circle at top, #001a18, #000000 70%);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.container {
-  width: 100%;
-  max-width: 520px;
-  padding: 40px;
-  border-radius: 25px;
-  background: rgba(5, 20, 18, 0.9);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(0,255,170,0.45);
-  box-shadow:
-    0 0 50px rgba(0,255,170,0.45),
-    inset 0 0 50px rgba(0,255,170,0.12);
-  color: white;
-}
-
-.logo {
-  text-align: center;
-  font-weight: 700;
-  margin-bottom: 30px;
-  color: #00ffaa;
-  text-shadow: 0 0 20px rgba(0,255,170,0.9);
-}
-
-.logo-top { display:block; font-size:28px; }
-.logo-bottom { display:block; font-size:24px; margin-top:4px; }
-
-.section-title {
-  margin: 25px 0 12px;
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  color: #00ffaa;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(0,255,170,0.5);
-  padding-bottom: 6px;
-}
-
-.admin-note {
-  font-size: 13px;
-  margin-bottom: 18px;
-  padding: 10px;
-  border-radius: 8px;
-  background: rgba(0,255,170,0.08);
-  border: 1px solid rgba(0,255,170,0.4);
-  color: #00ffaa;
-}
-
-input, select {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 16px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.05);
-  color: white;
-  font-size: 14px;
-}
-
-input:focus, select:focus {
-  outline:none;
-  border-color:#00ffaa;
-  box-shadow:0 0 20px rgba(0,255,170,1);
-}
-
-button {
-  width:100%;
-  padding:16px;
-  border-radius:12px;
-  background:linear-gradient(90deg,#00ffaa,#00ccff);
-  border:none;
-  font-weight:bold;
-  font-size:15px;
-  cursor:pointer;
-  color:black;
-  box-shadow:0 0 20px rgba(0,255,170,0.9);
-}
-
-#formMessage {
-  display:none;
-  margin-bottom:15px;
-  padding:10px;
-  border-radius:8px;
-  text-align:center;
-  font-weight:bold;
-  background:rgba(0,255,170,0.15);
-  border:1px solid rgba(0,255,170,0.6);
-  color:#00ffaa;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Create Account</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f4f4f4;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      max-width: 400px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+<h2>Create Account</h2>
 
-<div class="logo">
-  <span class="logo-top">Dongsun-Wook's</span>
-  <span class="logo-bottom">Stadium</span>
-</div>
+<!-- MAIN FORM -->
+<form name="signup" method="POST" data-netlify="true" onsubmit="handleSubmit(event)">
+  <input type="hidden" name="form-name" value="signup">
 
-<form id="signupForm"
-      name="signup"
-      method="POST"
-      data-netlify="true"
-      data-netlify-honeypot="bot-field">
+  <input type="text" name="First Name" placeholder="First Name" required>
+  <input type="text" name="Last Name" placeholder="Last Name" required>
+  <input type="text" name="Username" placeholder="Username" required>
 
-<input type="hidden" name="form-name" value="signup">
-
-<p style="display:none">
-  <label>Don’t fill this out:
-    <input name="bot-field">
-  </label>
-</p>
-
-<div class="section-title">Personal Details</div>
-<input type="text" name="First Name" placeholder="First Name" required>
-<input type="text" name="Last Name" placeholder="Last Name" required>
-<input type="date" name="Date of Birth" required>
-
-<div class="section-title">Account Information</div>
-<input type="text" name="Username" placeholder="Username" required>
-
-<div class="admin-note">
-Admin will review your request and send login details after approval.
-</div>
-
-<div class="section-title">Preferred Contact</div>
-<select name="Preferred Contact Method" required>
-<option value="">Preferred Contact Method</option>
-<option>Email</option>
-<option>Number</option>
-<option>Messenger</option>
-<option>Telegram</option>
-<option>Signal</option>
-</select>
-
-<input type="text" name="Contact Details" placeholder="Enter contact details" required>
-
-<div class="section-title">Payment Methods (At least one required)</div>
-<input type="text" name="Zelle" placeholder="Zelle">
-<input type="text" name="Venmo" placeholder="Venmo (@username)">
-<input type="text" name="Chime" placeholder="Chime ($username)">
-
-<div id="formMessage"></div>
-
-<label style="font-size:13px;">
-<input type="checkbox" required>
- I confirm all information provided is accurate.
-</label>
-
-<button type="submit">Create Account</button>
-
+  <button type="submit">Create Account</button>
 </form>
-</div>
 
-<!-- Hidden detection form for Netlify -->
+<!-- HIDDEN DETECTION FORM (IMPORTANT) -->
 <form name="signup" netlify hidden>
   <input type="text" name="First Name">
   <input type="text" name="Last Name">
-  <input type="date" name="Date of Birth">
   <input type="text" name="Username">
-  <input type="text" name="Preferred Contact Method">
-  <input type="text" name="Contact Details">
-  <input type="text" name="Zelle">
-  <input type="text" name="Venmo">
-  <input type="text" name="Chime">
 </form>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-
-  const form = document.getElementById("signupForm");
-  const messageDiv = document.getElementById("formMessage");
-
   function encode(data) {
     return Object.keys(data)
       .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
       .join("&");
   }
 
-  form.addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(form);
-
-    const zelle = formData.get("Zelle")?.trim();
-    const venmo = formData.get("Venmo")?.trim();
-    const chime = formData.get("Chime")?.trim();
-
-    if (!zelle && !venmo && !chime) {
-      alert("Please provide at least one payment method.");
-      return;
-    }
+  function handleSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
 
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: encode(Object.fromEntries(formData))
+      body: encode({
+        "form-name": form.getAttribute("name"),
+        "First Name": form.elements["First Name"].value,
+        "Last Name": form.elements["Last Name"].value,
+        "Username": form.elements["Username"].value
+      })
     })
     .then(() => {
-      messageDiv.style.display = "block";
-      messageDiv.innerHTML = "✅ Account request submitted successfully!";
+      alert("Account created successfully!");
       form.reset();
     })
-    .catch(() => {
-      alert("Submission failed. Please try again.");
-    });
-
-  });
-
-});
+    .catch(error => alert("Error submitting form"));
+  }
 </script>
 
 </body>
