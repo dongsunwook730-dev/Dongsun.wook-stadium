@@ -34,12 +34,6 @@ body {
     0 0 50px rgba(0,255,170,0.45),
     inset 0 0 50px rgba(0,255,170,0.12);
   color: white;
-  animation: fadeIn 0.8s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {opacity:0; transform:translateY(15px);}
-  to {opacity:1; transform:translateY(0);}
 }
 
 .logo {
@@ -47,10 +41,7 @@ body {
   font-weight: 700;
   margin-bottom: 30px;
   color: #00ffaa;
-  text-shadow:
-    0 0 8px #00ffaa,
-    0 0 20px #00ffaa,
-    0 0 40px rgba(0,255,170,0.9);
+  text-shadow: 0 0 20px rgba(0,255,170,0.9);
 }
 
 .logo-top { display:block; font-size:28px; }
@@ -85,7 +76,6 @@ input, select {
   background: rgba(255,255,255,0.05);
   color: white;
   font-size: 14px;
-  transition: 0.3s ease;
 }
 
 input:focus, select:focus {
@@ -103,14 +93,8 @@ button {
   font-weight:bold;
   font-size:15px;
   cursor:pointer;
-  transition:0.3s;
   color:black;
   box-shadow:0 0 20px rgba(0,255,170,0.9);
-}
-
-button:hover {
-  transform:translateY(-3px);
-  box-shadow:0 0 40px rgba(0,255,170,1);
 }
 
 #formMessage {
@@ -123,12 +107,6 @@ button:hover {
   background:rgba(0,255,170,0.15);
   border:1px solid rgba(0,255,170,0.6);
   color:#00ffaa;
-}
-
-@media (max-width:480px){
-  .container{padding:25px;}
-  .logo-top{font-size:22px;}
-  .logo-bottom{font-size:20px;}
 }
 </style>
 </head>
@@ -150,7 +128,6 @@ button:hover {
 
 <input type="hidden" name="form-name" value="signup">
 
-<!-- Honeypot -->
 <p style="display:none">
   <label>Don’t fill this out:
     <input name="bot-field">
@@ -197,6 +174,19 @@ Admin will review your request and send login details after approval.
 
 </form>
 </div>
+
+<!-- Hidden detection form for Netlify -->
+<form name="signup" netlify hidden>
+  <input type="text" name="First Name">
+  <input type="text" name="Last Name">
+  <input type="date" name="Date of Birth">
+  <input type="text" name="Username">
+  <input type="text" name="Preferred Contact Method">
+  <input type="text" name="Contact Details">
+  <input type="text" name="Zelle">
+  <input type="text" name="Venmo">
+  <input type="text" name="Chime">
+</form>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
