@@ -96,18 +96,6 @@ button {
   color:black;
   box-shadow:0 0 20px rgba(0,255,170,0.9);
 }
-
-#formMessage {
-  display:none;
-  margin-bottom:15px;
-  padding:10px;
-  border-radius:8px;
-  text-align:center;
-  font-weight:bold;
-  background:rgba(0,255,170,0.15);
-  border:1px solid rgba(0,255,170,0.6);
-  color:#00ffaa;
-}
 </style>
 </head>
 
@@ -121,18 +109,19 @@ button {
 </div>
 
 <form id="signupForm"
-      name="signup"
-      method="POST"
-      data-netlify="true"
-      data-netlify-honeypot="bot-field">
+      action="https://formsubmit.co/YOUR-EMAIL-HERE"
+      method="POST">
 
-<input type="hidden" name="form-name" value="signup">
+<!-- FormSubmit Settings -->
+<input type="hidden" name="_subject" value="New Stadium Account Request">
+<input type="hidden" name="_captcha" value="true">
+<input type="hidden" name="_template" value="table">
 
-<p style="display:none">
-  <label>Don’t fill this out:
-    <input name="bot-field">
-  </label>
-</p>
+<!-- Honeypot -->
+<input type="text" name="_honey" style="display:none">
+
+<!-- Redirect After Submit -->
+<input type="hidden" name="_next" value="thankyou.html">
 
 <div class="section-title">Personal Details</div>
 <input type="text" name="First Name" placeholder="First Name" required>
@@ -163,8 +152,6 @@ Admin will review your request and send login details after approval.
 <input type="text" name="Venmo" placeholder="Venmo (@username)">
 <input type="text" name="Chime" placeholder="Chime ($username)">
 
-<div id="formMessage"></div>
-
 <label style="font-size:13px;">
 <input type="checkbox" required>
  I confirm all information provided is accurate.
@@ -175,61 +162,16 @@ Admin will review your request and send login details after approval.
 </form>
 </div>
 
-<!-- Hidden detection form for Netlify -->
-<form name="signup" netlify hidden>
-  <input type="text" name="First Name">
-  <input type="text" name="Last Name">
-  <input type="date" name="Date of Birth">
-  <input type="text" name="Username">
-  <input type="text" name="Preferred Contact Method">
-  <input type="text" name="Contact Details">
-  <input type="text" name="Zelle">
-  <input type="text" name="Venmo">
-  <input type="text" name="Chime">
-</form>
-
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+document.getElementById("signupForm").addEventListener("submit", function(e) {
+  const zelle = document.querySelector("input[name='Zelle']").value.trim();
+  const venmo = document.querySelector("input[name='Venmo']").value.trim();
+  const chime = document.querySelector("input[name='Chime']").value.trim();
 
-  const form = document.getElementById("signupForm");
-  const messageDiv = document.getElementById("formMessage");
-
-  function encode(data) {
-    return Object.keys(data)
-      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-      .join("&");
-  }
-
-  form.addEventListener("submit", function(e) {
+  if (!zelle && !venmo && !chime) {
     e.preventDefault();
-
-    const formData = new FormData(form);
-
-    const zelle = formData.get("Zelle")?.trim();
-    const venmo = formData.get("Venmo")?.trim();
-    const chime = formData.get("Chime")?.trim();
-
-    if (!zelle && !venmo && !chime) {
-      alert("Please provide at least one payment method.");
-      return;
-    }
-
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: encode(Object.fromEntries(formData))
-    })
-    .then(() => {
-      messageDiv.style.display = "block";
-      messageDiv.innerHTML = "✅ Account request submitted successfully!";
-      form.reset();
-    })
-    .catch(() => {
-      alert("Submission failed. Please try again.");
-    });
-
-  });
-
+    alert("Please provide at least one payment method.");
+  }
 });
 </script>
 
