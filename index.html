@@ -44,9 +44,6 @@ body {
   text-shadow: 0 0 20px rgba(0,255,170,0.9);
 }
 
-.logo-top { display:block; font-size:28px; }
-.logo-bottom { display:block; font-size:24px; margin-top:4px; }
-
 .section-title {
   margin: 25px 0 12px;
   font-size: 12px;
@@ -104,78 +101,67 @@ button {
 <div class="container">
 
 <div class="logo">
-  <span class="logo-top">Dongsun-Wook's</span>
-  <span class="logo-bottom">Stadium</span>
+  <div style="font-size:28px;">Dongsun-Wook's</div>
+  <div style="font-size:24px;">Stadium</div>
 </div>
 
 <form id="signupForm"
-      <form action="https://formsubmit.co/YOUR-EMAIL@gmail.com" method="POST">
+      action="https://formsubmit.co/Dongsun.wook730@gmail.com"
+      method="POST">
 
+  <!-- FormSubmit Settings -->
   <input type="hidden" name="_subject" value="New Account Request">
   <input type="hidden" name="_captcha" value="true">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_next" value="thankyou.html">
   <input type="text" name="_honey" style="display:none">
 
+  <div class="section-title">Personal Details</div>
   <input type="text" name="First Name" placeholder="First Name" required>
   <input type="text" name="Last Name" placeholder="Last Name" required>
-  <input type="email" name="Email" placeholder="Email" required>
+  <input type="date" name="Date of Birth" required>
 
-  <button type="submit">Submit</button>
-</form>
+  <div class="section-title">Account Information</div>
+  <input type="text" name="Username" placeholder="Username" required>
 
-<!-- Honeypot -->
-<input type="text" name="_honey" style="display:none">
+  <div class="admin-note">
+  Admin will review your request and contact you after approval.
+  </div>
 
-<!-- Redirect After Submit -->
-<input type="hidden" name="_next" value="thankyou.html">
+  <div class="section-title">Preferred Contact</div>
+  <select name="Preferred Contact Method" required>
+    <option value="">Preferred Contact Method</option>
+    <option>Email</option>
+    <option>Number</option>
+    <option>Messenger</option>
+    <option>Telegram</option>
+    <option>Signal</option>
+  </select>
 
-<div class="section-title">Personal Details</div>
-<input type="text" name="First Name" placeholder="First Name" required>
-<input type="text" name="Last Name" placeholder="Last Name" required>
-<input type="date" name="Date of Birth" required>
+  <input type="text" name="Contact Details" placeholder="Enter contact details" required>
 
-<div class="section-title">Account Information</div>
-<input type="text" name="Username" placeholder="Username" required>
+  <div class="section-title">Payment Methods (At least one required)</div>
+  <input type="text" id="zelle" name="Zelle" placeholder="Zelle">
+  <input type="text" id="venmo" name="Venmo" placeholder="Venmo (@username)">
+  <input type="text" id="chime" name="Chime" placeholder="Chime ($username)">
 
-<div class="admin-note">
-Admin will review your request and send login details after approval.
-</div>
+  <label style="font-size:13px;">
+    <input type="checkbox" required>
+    I confirm all information provided is accurate.
+  </label>
 
-<div class="section-title">Preferred Contact</div>
-<select name="Preferred Contact Method" required>
-<option value="">Preferred Contact Method</option>
-<option>Email</option>
-<option>Number</option>
-<option>Messenger</option>
-<option>Telegram</option>
-<option>Signal</option>
-</select>
-
-<input type="text" name="Contact Details" placeholder="Enter contact details" required>
-
-<div class="section-title">Payment Methods (At least one required)</div>
-<input type="text" name="Zelle" placeholder="Zelle">
-<input type="text" name="Venmo" placeholder="Venmo (@username)">
-<input type="text" name="Chime" placeholder="Chime ($username)">
-
-<label style="font-size:13px;">
-<input type="checkbox" required>
- I confirm all information provided is accurate.
-</label>
-
-<button type="submit">Create Account</button>
+  <button type="submit">Create Account</button>
 
 </form>
 </div>
 
 <script>
 document.getElementById("signupForm").addEventListener("submit", function(e) {
-  const zelle = document.querySelector("input[name='Zelle']").value.trim();
-  const venmo = document.querySelector("input[name='Venmo']").value.trim();
-  const chime = document.querySelector("input[name='Chime']").value.trim();
+  const z = document.getElementById("zelle").value.trim();
+  const v = document.getElementById("venmo").value.trim();
+  const c = document.getElementById("chime").value.trim();
 
-  if (!zelle && !venmo && !chime) {
+  if (!z && !v && !c) {
     e.preventDefault();
     alert("Please provide at least one payment method.");
   }
