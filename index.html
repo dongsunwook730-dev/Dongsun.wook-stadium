@@ -110,13 +110,13 @@ button {
   <div class="section-title">Personal Details</div>
   <input type="text" name="first_name" placeholder="First Name" required>
   <input type="text" name="last_name" placeholder="Last Name" required>
-  <input type="date" name="dob" required>
+  <input type="date" id="dob" name="dob" required>
 
   <div class="section-title">Account Information</div>
   <input type="text" name="username" placeholder="Username" required>
 
   <div class="admin-note">
-  Admin will review your request and contact you after approval.
+  You must be 18+ to create an account. Admin will review your request.
   </div>
 
   <div class="section-title">Preferred Contact</div>
@@ -138,7 +138,7 @@ button {
 
   <label style="font-size:13px;">
     <input type="checkbox" required>
-    I confirm all information provided is accurate.
+    I confirm I am 18+ and all information provided is accurate.
   </label>
 
   <button type="submit">Create Account</button>
@@ -151,10 +151,46 @@ button {
 <script>
 emailjs.init("lg0t6jcFmcpQj1foH");
 
+// Auto restrict date picker to 18+
+const today = new Date();
+const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+document.getElementById("dob").max = maxDate.toISOString().split("T")[0];
+
 document.getElementById("signupForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
   const form = this;
+  const dobValue = document.getElementById("dob").value;
+
+  if (!dobValue) {
+    alert("Date of Birth is required.");
+    return;
+  }
+
+  const birthDate = new Date(dobValue);
+  const today = new Date();
+
+  if (birthDate >= today) {
+    alert("Invalid Date of Birth.");
+    return;
+  }
+
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  if (age < 18) {
+    alert("You must be at least 18 years old.");
+    return;
+  }
+
+  if (age > 100) {
+    alert("Invalid Date of Birth.");
+    return;
+  }
 
   const z = document.getElementById("zelle").value.trim();
   const v = document.getElementById("venmo").value.trim();
@@ -187,7 +223,7 @@ document.getElementById("signupForm").addEventListener("submit", function(e) {
     button.disabled = false;
   })
   .catch((error) => {
-    alert("Failed to send. Please try again.");
+    alert("Submission failed. Please try again.");
     console.error(error);
     button.innerText = "Create Account";
     button.disabled = false;
