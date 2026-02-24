@@ -105,31 +105,22 @@ button {
   <div style="font-size:24px;">Stadium</div>
 </div>
 
-<form id="signupForm"
-      action="https://formsubmit.co/Dongsun.wook730@gmail.com"
-      method="POST">
-
-  <!-- FormSubmit Settings -->
-  <input type="hidden" name="_subject" value="New Stadium Account Request">
-  <input type="hidden" name="_captcha" value="true">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_next" value="thankyou.html">
-  <input type="text" name="_honey" style="display:none">
+<form id="signupForm">
 
   <div class="section-title">Personal Details</div>
-  <input type="text" name="First Name" placeholder="First Name" required>
-  <input type="text" name="Last Name" placeholder="Last Name" required>
-  <input type="date" name="Date of Birth" required>
+  <input type="text" name="first_name" placeholder="First Name" required>
+  <input type="text" name="last_name" placeholder="Last Name" required>
+  <input type="date" name="dob" required>
 
   <div class="section-title">Account Information</div>
-  <input type="text" name="Username" placeholder="Username" required>
+  <input type="text" name="username" placeholder="Username" required>
 
   <div class="admin-note">
   Admin will review your request and contact you after approval.
   </div>
 
   <div class="section-title">Preferred Contact</div>
-  <select name="Preferred Contact Method" required>
+  <select name="contact_method" required>
     <option value="">Preferred Contact Method</option>
     <option>Email</option>
     <option>Number</option>
@@ -138,12 +129,12 @@ button {
     <option>Signal</option>
   </select>
 
-  <input type="text" name="Contact Details" placeholder="Enter contact details" required>
+  <input type="text" name="contact_details" placeholder="Enter contact details" required>
 
   <div class="section-title">Payment Methods (At least one required)</div>
-  <input type="text" id="zelle" name="Zelle" placeholder="Zelle">
-  <input type="text" id="venmo" name="Venmo" placeholder="Venmo (@username)">
-  <input type="text" id="chime" name="Chime" placeholder="Chime ($username)">
+  <input type="text" id="zelle" name="zelle" placeholder="Zelle">
+  <input type="text" id="venmo" name="venmo" placeholder="Venmo (@username)">
+  <input type="text" id="chime" name="chime" placeholder="Chime ($username)">
 
   <label style="font-size:13px;">
     <input type="checkbox" required>
@@ -155,16 +146,52 @@ button {
 </form>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
 <script>
+emailjs.init("lg0t6jcFmcpQj1foH");
+
 document.getElementById("signupForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const form = this;
+
   const z = document.getElementById("zelle").value.trim();
   const v = document.getElementById("venmo").value.trim();
   const c = document.getElementById("chime").value.trim();
 
   if (!z && !v && !c) {
-    e.preventDefault();
     alert("Please provide at least one payment method.");
+    return;
   }
+
+  const button = form.querySelector("button");
+  button.innerText = "Submitting...";
+  button.disabled = true;
+
+  emailjs.send("service_5zr4dic", "template_wbeu645", {
+    first_name: form.first_name.value,
+    last_name: form.last_name.value,
+    dob: form.dob.value,
+    username: form.username.value,
+    contact_method: form.contact_method.value,
+    contact_details: form.contact_details.value,
+    zelle: z || "N/A",
+    venmo: v || "N/A",
+    chime: c || "N/A"
+  })
+  .then(() => {
+    alert("Account request submitted successfully!");
+    form.reset();
+    button.innerText = "Create Account";
+    button.disabled = false;
+  })
+  .catch((error) => {
+    alert("Failed to send. Please try again.");
+    console.error(error);
+    button.innerText = "Create Account";
+    button.disabled = false;
+  });
 });
 </script>
 
